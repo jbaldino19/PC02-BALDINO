@@ -54,7 +54,8 @@ public class AppSettings {
             }
         }
 
-        if(!isPrefixOk){
+        if(!isPrefixOk)
+        {
             return false;
         }
 
