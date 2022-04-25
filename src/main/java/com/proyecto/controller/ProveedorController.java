@@ -68,7 +68,7 @@ public class ProveedorController {
 													Proveedor objSalida = proveedorService.insertaActualizaProveedor(obj);
 													if (objSalida == null)
 													{
-														salida.put("mensaje", obj.getUbigeo().getDepartamento());
+														salida.put("mensaje", AppSettings.MENSAJE_REG_ERROR);
 													}
 													else
 													{
