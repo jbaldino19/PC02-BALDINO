@@ -23,4 +23,9 @@ public class ProveedorServiceImpl implements ProveedorService {
 	public Proveedor insertaActualizaProveedor(Proveedor obj) {
 		return repository.save(obj);
 	}
+
+	@Override
+	public List<Proveedor> consultaProveedor(String ruc, String razonsocial, String celular, int idUbigeo, int estado) {
+		return repository.consultaProveedor(ruc, razonsocial, celular, idUbigeo, estado);
+	}
 }

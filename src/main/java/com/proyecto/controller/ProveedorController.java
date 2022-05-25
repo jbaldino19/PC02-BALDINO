@@ -7,20 +7,19 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.proyecto.entidad.Proveedor;
 import com.proyecto.service.ProveedorService;
 import com.proyecto.util.AppSettings;
-
-import antlr.StringUtils;
-import ch.qos.logback.core.util.StringCollectionUtil;
 
 @RestController
 @RequestMapping("/url/proveedor")
@@ -123,6 +122,41 @@ public class ProveedorController {
 			else
 			{
 				salida.put("mensaje", "Por favor ingrese la razón social.");
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			salida.put("mensaje", AppSettings.MENSAJE_REG_ERROR);
+		}
+		
+		return ResponseEntity.ok(salida);
+	}
+
+	@GetMapping("/consultaProveedor")
+	@ResponseBody
+	public ResponseEntity<Map<String, Object>> consultaProveedor(
+				@RequestParam(name = "ruc", required = false, defaultValue = "") String ruc,
+				@RequestParam(name = "razonsocial", required = false, defaultValue = "") String razonsocial,
+				@RequestParam(name = "celular", required = false, defaultValue = "") String celular,
+				@RequestParam(name = "idUbigeo", required = false, defaultValue = "-1") int idUbigeo,
+				@RequestParam(name = "estado", required = true, defaultValue = "1") int estado
+			){
+
+		Map<String, Object> salida = new HashMap<>();
+		
+		try
+		{
+			List<Proveedor> lista = proveedorService.consultaProveedor(ruc, "%" + razonsocial + "%", celular, idUbigeo, estado);
+			
+			if(CollectionUtils.isEmpty(lista))
+			{
+				salida.put("mensaje", "No existe datos para mostrar");
+			}
+			else
+			{
+				salida.put("data", lista);
+				salida.put("mensaje", "Existen " + lista.size() + " datos para mostrar");
 			}
 		}
 		catch (Exception e)
